@@ -28,9 +28,9 @@ endpoint: https://development.avalara.net
 Setup the gem in an initializer (if using Rails), or wherever if you're not. You can load in your username/password however you want, but here's a sample way to do this:
 
 ```ruby
-file = File.new(File.join(Rails.root, 'config', 'avalara.yml'))
+path = File.join(Rails.root, 'config', 'avalara.yml')
 
-if file.exist?
+if File.exists?(path)
   begin
     AVALARA_CONFIGURATION = YAML.load_file(path)
     Avalara.configure do |config|
@@ -38,11 +38,12 @@ if file.exist?
       config.password = AVALARA_CONFIGURATION['password'] || abort("Avalara configuration file (#{path}) is missing the password value.")
       config.version = AVALARA_CONFIGURATION['version'] if AVALARA_CONFIGURATION.has_key?('version')
       config.endpoint = AVALARA_CONFIGURATION['endpoint'] if AVALARA_CONFIGURATION.has_key?('endpoint')
-    end'
+    end
   end
 else
   abort "Avalara configuration not found."
 end
+
 ```
 
 ## Usage
